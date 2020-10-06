@@ -55,3 +55,93 @@ The file `mongo-init/init.js` creates a user to be used by the backend for the a
 Web-based UI to conveniently access to **mongo** (e. g. can be used for debugging).
 
 It is connected to the **MongoDB** instance from by default.
+
+# Deployment
+
+### Label storage severs
+
+Mark **all** storage servers with labels, so storage server containers will be deployed there:
+
+```sh
+docker node update --label-add storage_server=true storage-server-name
+```
+
+where `storage-server-name` is a name of a storage server, which is unique for each server.
+
+
+## Local deployment using `docker-machine`
+
+### Create machines
+
+```sh
+# Create manager node
+docker-machine create --driver=virtualbox --virtualbox-cpu-count=1 --virtualbox-disk-size=4096 --virtualbox-memory=1024 main
+
+# Create storage nodes
+docker-machine create --driver=virtualbox --virtualbox-cpu-count=1 --virtualbox-disk-size=4096 --virtualbox-memory=1024 storage1
+docker-machine create --driver=virtualbox --virtualbox-cpu-count=1 --virtualbox-disk-size=4096 --virtualbox-memory=1024 storage2
+```
+
+### Share the directory with the manager node
+
+Mount the docker directory to the manager node when use `docker-machine`:
+
+```sh
+docker-machine stop main
+
+vboxmanage sharedfolder add main --name "$(pwd)/docker" --hostpath="$(pwd)/docker" --automount
+
+docker-machine start main
+```
+
+### "Connect" to the created machines
+
+Run this in separate terminals, to connect each terminal to a particular machine:
+
+```sh
+eval $(docker-machine env main)
+```
+
+```sh
+eval $(docker-machine env storage1)
+```
+
+```sh
+eval $(docker-machine env storage2)
+```
+
+### Initialize main node in `docker swarm` as manager
+
+Run in the terminal "connected" to the **main** machine:
+
+```sh
+docker swarm init --advertise-addr=$(docker-machine ip main)
+```
+
+To be able to join to the swarm copy the output of the following command:
+
+```sh
+docker swarm join-token worker
+```
+
+### Join the swarm from other nodes
+
+The output of the previous command will look line:
+
+```sh
+docker swarm join --token token-value 192.168.99.106:2377
+```
+
+Run it for all other nodes that should join the swarm.
+
+### [Label storage severs](#label-storage-severs)
+
+### Deploy the stack to the swarm
+
+From manager node run:
+
+```sh
+cd ./docker
+
+docker stack deploy -c docker-compose.yml dfs
+```
