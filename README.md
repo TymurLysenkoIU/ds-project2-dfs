@@ -89,8 +89,7 @@ docker-machine create --driver=virtualbox --virtualbox-cpu-count=1 --virtualbox-
 # Create storage nodes
 docker-machine create --driver=virtualbox --virtualbox-cpu-count=1 --virtualbox-disk-size=4096 --virtualbox-memory=1024 storage1
 docker-machine create --driver=virtualbox --virtualbox-cpu-count=1 --virtualbox-disk-size=4096 --virtualbox-memory=1024 storage2
-docker-machine create --driver=virtualbox --virtualbox-cpu-count=1 --virtualbox-disk-size=4096 --virtualbox-memory
-=1024 storage3
+docker-machine create --driver=virtualbox --virtualbox-cpu-count=1 --virtualbox-disk-size=4096 --virtualbox-memory=1024 storage3
 ```
 
 Hyper-V
