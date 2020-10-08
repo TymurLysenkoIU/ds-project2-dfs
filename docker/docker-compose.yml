@@ -1,7 +1,6 @@
 version: "3.8"
 services:
   mongo:
-    # container_name: ds-mongo
     image: mongo:4.2.10-bionic
     command: --config /etc/mongo/mongod.conf --port ${MONGO_PORT:-27017}
     env_file: mongo.env
@@ -28,7 +27,6 @@ services:
   mongo-express:
     depends_on:
       - mongo
-    # container_name: ds-mongo-express
     image: mongo-express:0.54.0
     env_file: mongo.env
     environment:
@@ -44,28 +42,41 @@ services:
         constraints:
           - "node.role==manager"
 
-  storage-ftp:
-    image: fauria/vsftpd:latest
-    networks:
-      - name_storage
+  storage-server:
+    image: sitiritis/ds-dfs-storage-server:latest
     ports:
-      - "20:20"
-      - "21:21"
-      - "21100-21110:21100-21110"
+      - target:    80
+        published: 80
+        protocol:  tcp
+        mode:      host
+      - target:    20
+        published: 20
+        protocol:  udp
+        mode:      host
+      - target:    21
+        published: 21
+        protocol:  udp
+        mode:      host
+      - target:    21100
+        published: 21100
+        protocol:  udp
+        mode:      host
+      - target:    21101
+        published: 21101
+        protocol:  udp
+        mode:      host
+      - target:    21102
+        published: 21102
+        protocol:  udp
+        mode:      host
     environment:
       FTP_USER: ${FTP_USER:-ftpuser}
       FTP_PASS: ${FTP_PASS:-ftp-pass}
       PASV_MIN_PORT: "21100"
-      PASV_MAX_PORT: "21110"
+      PASV_MAX_PORT: "21102"
+      NAME_SERVER_ADDRESS: "http://name-server"
     deploy:
       mode: global
       placement:
         constraints:
           - "node.labels.storage_server==true"
-
-
-networks:
-  name_storage:
-    driver: overlay
-    attachable: false
-    internal: true
