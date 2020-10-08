@@ -81,6 +81,7 @@ where `storage-server-name` is a name of a storage server, which is unique for e
 
 ### Create machines
 
+VirtualBox
 ```sh
 # Create manager node
 docker-machine create --driver=virtualbox --virtualbox-cpu-count=1 --virtualbox-disk-size=4096 --virtualbox-memory=1024 main
@@ -88,6 +89,19 @@ docker-machine create --driver=virtualbox --virtualbox-cpu-count=1 --virtualbox-
 # Create storage nodes
 docker-machine create --driver=virtualbox --virtualbox-cpu-count=1 --virtualbox-disk-size=4096 --virtualbox-memory=1024 storage1
 docker-machine create --driver=virtualbox --virtualbox-cpu-count=1 --virtualbox-disk-size=4096 --virtualbox-memory=1024 storage2
+docker-machine create --driver=virtualbox --virtualbox-cpu-count=1 --virtualbox-disk-size=4096 --virtualbox-memory
+=1024 storage3
+```
+
+Hyper-V
+```sh
+# Create manager node
+docker-machine create --driver=hyperv --hyperv-cpu-count=1 --hyperv-disk-size=4096 --hyperv-memory=1024 main
+
+# Create storage nodes
+docker-machine create --driver=hyperv --hyperv-cpu-count=1 --hyperv-disk-size=4096 --hyperv-memory=1024 storage1
+docker-machine create --driver=hyperv --hyperv-cpu-count=1 --hyperv-disk-size=4096 --hyperv-memory=1024 storage2
+docker-machine create --driver=hyperv --hyperv-cpu-count=1 --hyperv-disk-size=4096 --hyperv-memory=1024 storage3
 ```
 
 ### Share the directory with the manager node
