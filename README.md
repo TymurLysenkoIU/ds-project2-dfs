@@ -56,6 +56,14 @@ Web-based UI to conveniently access to **mongo** (e. g. can be used for debuggin
 
 It is connected to the **MongoDB** instance from by default.
 
+### Storage server (`storage-server` service)
+
+Is a global service deployed on each swarm node labeled with `storage_server=true`. The image and its description is available [here](https://github.com/TymurLysenkoIU/ds-project2-storage-server).
+
+The storage server API is available at port **80** on each node, where the storage server is deployed. FTP ports are **20** and  **21** plus passive mode ports **21100-21102**.
+
+> Note: the service is not automatically load balanced by the docker, so **it is guaranteed that access to each node accesses the requested node**.
+
 # Deployment
 
 ### Label storage severs
