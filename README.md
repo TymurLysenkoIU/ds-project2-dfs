@@ -115,6 +115,14 @@ vboxmanage sharedfolder add main --name "$(pwd)/docker" --hostpath="$(pwd)/docke
 docker-machine start main
 ```
 
+or
+
+```sh
+docker-machine ssh main
+
+git clone https://github.com/TymurLysenkoIU/ds-project2-dfs
+```
+
 ### "Connect" to the created machines
 
 Run this in separate terminals, to connect each terminal to a particular machine:

@@ -51,11 +51,11 @@ services:
         mode:      host
       - target:    20
         published: 20
-        protocol:  udp
+        protocol:  tcp
         mode:      host
       - target:    21
         published: 21
-        protocol:  udp
+        protocol:  tcp
         mode:      host
       - target:    21100
         published: 21100
