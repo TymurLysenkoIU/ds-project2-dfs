@@ -59,15 +59,15 @@ services:
         mode:      host
       - target:    21100
         published: 21100
-        protocol:  udp
+        protocol:  tcp
         mode:      host
       - target:    21101
         published: 21101
-        protocol:  udp
+        protocol:  tcp
         mode:      host
       - target:    21102
         published: 21102
-        protocol:  udp
+        protocol:  tcp
         mode:      host
     environment:
       FTP_USER: ${FTP_USER:-ftpuser}
