@@ -4,9 +4,9 @@ This repository contains common files for the DFS (distributed file system) for 
 
 ### Links to all repositories
 
-[Client](https://github.com/TymurLysenkoIU/ds-project2-client)
-[Name Server](https://github.com/TymurLysenkoIU/ds-project2-name-server)
-[Storage Server](https://github.com/TymurLysenkoIU/ds-project2-storage-server)
+- [Client](https://github.com/TymurLysenkoIU/ds-project2-client)
+- [Name Server](https://github.com/TymurLysenkoIU/ds-project2-name-server)
+- [Storage Server](https://github.com/TymurLysenkoIU/ds-project2-storage-server)
 
 ### Architectural diagram
 ![](https://i.imgur.com/nXHyHsS.png)
