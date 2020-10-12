@@ -2,6 +2,28 @@
 
 This repository contains common files for the DFS (distributed file system) for Distributed systems course at Innopolis University.
 
+### Links to all repositories
+
+[Client](https://github.com/TymurLysenkoIU/ds-project2-client)
+[Name Server](https://github.com/TymurLysenkoIU/ds-project2-name-server)
+[Storage Server](https://github.com/TymurLysenkoIU/ds-project2-storage-server)
+
+### Architectural diagram
+![](https://i.imgur.com/nXHyHsS.png)
+
+### Description of communication protocols
+
+1. **HTTP** protocol between a client and the name server. Commands are passed as URL parameters. Files are passed in a payload.
+2. **FTP** protocol between the name server and a storage server. It is used for the file transfer and command for creation and removal of directories.
+3. **MongoDB** Wire Protocol for communication between the processing program on the name server and the database. Directory tree is stored in a tree like structure in a database.
+4. **HTTP** protocol between the name server and a storage server. Each storage servers has an endpoint for checking availabily and free disk space.
+
+### Provable contribution of each team member
+- [**Insaf Safin**](https://) - client, interface between client and storage server
+- [**Aidar Garikhanov**](https://) - name server: processing program, FTP client, mongodb client.
+- [**Tymur Lysenko**](https://github.com/TymurLysenkoIU) - storage server, containerization of all services, deployment in Docker Swarm and AWS
+
+
 # Structure
 
 ## `docker`
