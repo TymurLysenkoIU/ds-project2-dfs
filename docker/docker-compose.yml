@@ -42,7 +42,32 @@ services:
         constraints:
           - "node.role==manager"
 
+  name-server:
+    depends_on:
+      - mongo
+    image: sitiritis/ds-dfs-name-server:latest
+    ports:
+      - "8000:80"
+    environment:
+      MONGO_HOST: "${MONGO_HOST:-mongo}:${MONGO_CONTAINER_PORT:-27017}"
+      MONGO_USER: ${MONGO_USER:-admin}
+      MONGO_PASS: ${MONGO_PASS:-mongo}
+      FTP_USER: ${FTP_USER:-ftpuser}
+      FTP_PASS: ${FTP_PASS:-ftp-pass}
+      STORAGE_REQUEST_TIMEOUT: ${STORAGE_REQUEST_TIMEOUT:-2}
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        max_replicas_per_node: 1
+        constraints:
+          - "node.role==manager"
+      restart_policy:
+        condition: on-failure
+
   storage-server:
+    depends_on:
+      - name-server
     image: sitiritis/ds-dfs-storage-server:latest
     ports:
       - target:    80
@@ -64,6 +89,9 @@ services:
       NAME_SERVER_ADDRESS: "http://name-server"
     deploy:
       mode: global
+      restart_policy:
+        condition: on-failure
+        delay: 5s
       placement:
         constraints:
           - "node.labels.storage_server==true"

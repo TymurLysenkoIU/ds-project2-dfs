@@ -4,7 +4,7 @@ db.createUser(
     user: "name-server",
     pwd: "name-server-password",
     roles: [
-      { role: "readWrite", db: "dfs" }
+      { role: "readWrite", db: "storage" }
     ]
   }
 )
