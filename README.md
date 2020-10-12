@@ -19,8 +19,8 @@ This repository contains common files for the DFS (distributed file system) for 
 4. **HTTP** protocol between the name server and a storage server. Each storage servers has an endpoint for checking availabily and free disk space.
 
 ### Provable contribution of each team member
-- [**Insaf Safin**](https://) - client, interface between client and storage server
-- [**Aidar Garikhanov**](https://) - name server: processing program, FTP client, mongodb client.
+- [**Insaf Safin**](https://github.com/safinsaf) - client, interface between client and storage server
+- [**Aidar Garikhanov**](https://github.com/a1d4r) - name server: processing program, FTP client, mongodb client.
 - [**Tymur Lysenko**](https://github.com/TymurLysenkoIU) - storage server, containerization of all services, deployment in Docker Swarm and AWS
 
 
