@@ -80,13 +80,25 @@ It is connected to the **MongoDB** instance from by default.
 
 ### Storage server (`storage-server` service)
 
-Is a global service deployed on each swarm node labeled with `storage_server=true`. The image and its description is available [here](https://github.com/TymurLysenkoIU/ds-project2-storage-server).
+Server that actually stores the files & directories.
+
+The image and its description is available [here](https://github.com/TymurLysenkoIU/ds-project2-storage-server).
+
+Is a global service deployed on each swarm node labeled with `storage_server=true`.
 
 The storage server API is available at port **80** on each node, where the storage server is deployed. FTP ports are **20** and  **21**.
 
 > Note: the service is not automatically load balanced by the docker, so **it is guaranteed that access to each node accesses the requested node**.
 
 > Note: The **FTP server runs in an active mode**, so only 1 client will be able to work with the server at the same time. This is due to docker constraints: it doesn't allow to set custom values for environment variables per node.
+
+### Name server (`name-server` service)
+
+Server, to which client contacts to manage the DFS. This server manages connected storage servers.
+
+The image and its description is available [here](https://github.com/TymurLysenkoIU/ds-project2-name-server).
+
+Is deployed on manager node with a single replica.
 
 # Deployment
 
