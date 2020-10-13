@@ -54,7 +54,8 @@ services:
       MONGO_PASS: ${MONGO_PASS:-mongo}
       FTP_USER: ${FTP_USER:-ftpuser}
       FTP_PASS: ${FTP_PASS:-ftp-pass}
-      STORAGE_REQUEST_TIMEOUT: ${STORAGE_REQUEST_TIMEOUT:-2}
+      # STORAGE_REQUEST_TIMEOUT: ${STORAGE_REQUEST_TIMEOUT:-2}
+      STORAGE_SERVER_PORT: ${STORAGE_SERVER_PORT:-80}
     deploy:
       mode: replicated
       replicas: 1
@@ -65,7 +66,7 @@ services:
       restart_policy:
         condition: on-failure
 
-  storage-server:
+  storage-server-1:
     depends_on:
       - name-server
     image: sitiritis/ds-dfs-storage-server:latest
@@ -82,16 +83,87 @@ services:
         published: 21
         protocol:  tcp
         mode:      host
+      - target:    21100
+        published: 21100
+        protocol:  tcp
+        mode:      host
+      - target:    21101
+        published: 21101
+        protocol:  tcp
+        mode:      host
+      - target:    21102
+        published: 21102
+        protocol:  tcp
+        mode:      host
     environment:
       FTP_USER: ${FTP_USER:-ftpuser}
       FTP_PASS: ${FTP_PASS:-ftp-pass}
-      PASV_ENABLE: "NO"
+      PASV_ENABLE: "YES"
+      PASV_ADDRESS: ${SERVER_ADDR_1:?SERVER_ADDR_1 env is not set}
+      PASV_ADDR_RESOLVE: ${PASV_ADDR_RESOLVE_1:-NO}
       NAME_SERVER_ADDRESS: ${NAME_SERVER_ADDRESS:-"http://name-server"}
+      SERVER_ADDR: ${SERVER_ADDR_1}
+      SERVER_PORT: ${SERVER_PORT_1:-80}
+      PASV_MIN_PORT: 21100
+      PASV_MAX_PORT: 21102
     deploy:
-      mode: global
+      mode: replicated
+      replicas: 1
+      placement:
+        max_replicas_per_node: 1
+        constraints:
+          - "node.labels.storage_server==1"
       restart_policy:
         condition: on-failure
         delay: 5s
+
+  storage-server-2:
+    depends_on:
+      - name-server
+    image: sitiritis/ds-dfs-storage-server:latest
+    ports:
+      - target:    80
+        published: 80
+        protocol:  tcp
+        mode:      host
+      - target:    20
+        published: 20
+        protocol:  tcp
+        mode:      host
+      - target:    21
+        published: 21
+        protocol:  tcp
+        mode:      host
+      - target:    21100
+        published: 21100
+        protocol:  tcp
+        mode:      host
+      - target:    21101
+        published: 21101
+        protocol:  tcp
+        mode:      host
+      - target:    21102
+        published: 21102
+        protocol:  tcp
+        mode:      host
+    environment:
+      FTP_USER: ${FTP_USER:-ftpuser}
+      FTP_PASS: ${FTP_PASS:-ftp-pass}
+      PASV_ENABLE: "YES"
+      PASV_ADDRESS: ${SERVER_ADDR_2:?SERVER_ADDR_1 env is not set}
+      PASV_ADDR_RESOLVE: ${PASV_ADDR_RESOLVE_2:-NO}
+      NAME_SERVER_ADDRESS: ${NAME_SERVER_ADDRESS:-"http://name-server"}
+      SERVER_ADDR: ${SERVER_ADDR_2}
+      SERVER_PORT: ${SERVER_PORT_2:-80}
+      PASV_MIN_PORT: 21100
+      PASV_MAX_PORT: 21102
+    deploy:
+      mode: replicated
+      replicas: 1
       placement:
+        max_replicas_per_node: 1
         constraints:
-          - "node.labels.storage_server==true"
+          - "node.labels.storage_server==2"
+      restart_policy:
+        condition: on-failure
+        delay: 5s

@@ -84,7 +84,9 @@ Server that actually stores the files & directories.
 
 The image and its description is available [here](https://github.com/TymurLysenkoIU/ds-project2-storage-server).
 
-Is a global service deployed on each swarm node labeled with `storage_server=true`.
+There is a predefined number of this services found in `docker-compose.yml`. Each instance is deployed to a node with label `storage_server=n`, where `n` is a unique number for each storage server.
+
+In addition, each node on which an instance is deployed must have file `~/deploy/instance_config.py`, containing _IP_ and _port_ of the machine to which it is deployed, so that name server is able to access the deployed storage server.
 
 The storage server API is available at port **80** on each node, where the storage server is deployed. FTP ports are **20** and  **21**.
 
@@ -104,10 +106,10 @@ Is deployed on manager node with a single replica.
 
 ### Label storage severs
 
-Mark **all** storage servers with labels, so storage server containers will be deployed there:
+Set unique values for the special label on **all** storage servers, so storage server services will be deployed there:
 
 ```sh
-docker node update --label-add storage_server=true storage-server-name
+docker node update --label-add storage_server=1 storage-server-name
 ```
 
 where `storage-server-name` is a name of a storage server, which is unique for each server.
@@ -207,6 +209,9 @@ From manager node run:
 
 ```sh
 cd ./docker
+
+export SERVER_ADDR_1=$(docker-machine ip storage1)
+export SERVER_ADDR_2=$(docker-machine ip storage2)
 
 docker stack deploy -c docker-compose.yml dfs
 ```
